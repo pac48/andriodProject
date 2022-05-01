@@ -12,8 +12,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <SurfaceView
-            android:id="@+id/surfaceView"
+        <com.example.myapplication.GameView
+            android:id="@+id/GameView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
