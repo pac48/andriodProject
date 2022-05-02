@@ -1,6 +1,6 @@
-package com.example.myapplication.mesh;
+package com.example.myapplication.object;
 
-public class Camera {
+public class Camera extends GameObject{
     /**
      * Store the view matrix. This can be thought of as our camera. This matrix transforms world space to eye space;
      * it positions things relative to our eye.
