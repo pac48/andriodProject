@@ -1,15 +1,18 @@
 package com.example.myapplication.material;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 
 import com.example.myapplication.R;
-import com.example.myapplication.material.TextureHelper;
 import com.example.myapplication.shader.ShaderHelper;
 import com.example.myapplication.utils.RawResourceReader;
 
+import java.util.ArrayList;
+
 public class Material {
-    public int textureHandle;
+    public ArrayList<Integer> textureHandles;
     public int programHandle;
     public String[] attributes;
     public Light light;
@@ -22,13 +25,28 @@ public class Material {
     public int mTextureCoordinateHandle;
     public int bitmapId;
     public Context context;
-
+    public final ArrayList<Bitmap> bitmaps;
+    public int animationFrame = 0;
 
     public Material(Context contextIn, final int bitmapIdIn) {
         bitmapId = bitmapIdIn;
         context = contextIn;
 
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), bitmapId, options);
+        bitmaps = new ArrayList<>();
+        bitmaps.add(bitmap);
+
+        textureHandles = new ArrayList<>();
     }
+
+    public Material(Context contextIn, final ArrayList<Bitmap>  bitmapsIn) {
+        bitmaps = bitmapsIn;
+        context = contextIn;
+        textureHandles = new ArrayList<>();
+    }
+
     public void compileAndLink(){
 //        resourceId is the bitmap texture
         int vertexShaderId = R.raw.per_pixel_vertex_shader;
@@ -43,9 +61,9 @@ public class Material {
 
         programHandle = ShaderHelper.createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle, attributes);
 
-        textureHandle =  TextureHelper.loadTexture(context, bitmapId);
-
-
+        for (Bitmap bitmap : bitmaps){
+            textureHandles.add(TextureHelper.loadTexture(context, bitmap));
+        }
         // Set program handles for cube drawing.
         mMVPMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVPMatrix");
         mMVMatrixHandle = GLES20.glGetUniformLocation(programHandle, "u_MVMatrix");
@@ -56,7 +74,10 @@ public class Material {
         mTextureCoordinateHandle = GLES20.glGetAttribLocation(programHandle, "a_TexCoordinate");
         light = new Light();
 
+    }
 
+    public int getTextureHandle(){
+        return textureHandles.get(animationFrame);
     }
 
     public class Light {

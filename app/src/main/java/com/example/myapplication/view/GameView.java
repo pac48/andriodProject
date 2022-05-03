@@ -1,19 +1,16 @@
-package com.example.myapplication;
+package com.example.myapplication.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 
+import com.example.myapplication.R;
+import com.example.myapplication.Scene;
 import com.example.myapplication.object.Camera;
 import com.example.myapplication.object.GameObject;
-import com.example.myapplication.object.Plane;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -28,6 +25,7 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
     private static final int MAX_FRAME_TIME = (int) (1000.0 / 60.0);
     long time;
     public Scene scene;
+    JoyView joyView;
 
 
 
@@ -45,6 +43,11 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
         setFocusable(true);
         gameRunning = false;
         this.setRenderer(this);
+
+
+    }
+    public void setControlView(JoyView joyViewIn){
+        joyView = joyViewIn;
     }
 
     @Override
@@ -130,8 +133,8 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
             GLES20.glUseProgram(gameObject.material.programHandle);
 
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, gameObject.material.textureHandle);
-            GLES20.glUniform1i(gameObject.material.textureHandle, 0);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, gameObject.material.getTextureHandle());
+            GLES20.glUniform1i(gameObject.material.getTextureHandle(), 0);
 
             // Calculate position of the light. Rotate and then push into the distance.
             Matrix.setIdentityM(gameObject.material.light.mLightModelMatrix, 0);
@@ -146,8 +149,12 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
             drawMesh(gameObject, camera);
 
         }
-//        posX += 0.005;
-//        this.setVerticesAndDraw(0.4f+posX,0.0f, gl, (byte) 255);
+        if (!joyView.pressed){
+            joyView.posX = (int)(.9*joyView.posX + .1*joyView.surfaceView.getWidth()/2);
+            joyView.posY = (int)(.9*joyView.posY + .1*joyView.surfaceView.getHeight()/2);
+            // draw joy view last
+            joyView.drawFrame();
+        }
 
     }
 

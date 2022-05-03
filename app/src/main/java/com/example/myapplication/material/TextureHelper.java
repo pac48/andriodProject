@@ -8,7 +8,7 @@ import android.opengl.GLUtils;
 
 public class TextureHelper
 {
-	public static int loadTexture(final Context context, final int resourceId)
+	public static int loadTexture(final Context context, Bitmap bitmap)
 	{
 		final int[] textureHandle = new int[1];
 		
@@ -19,11 +19,7 @@ public class TextureHelper
 			throw new RuntimeException("Error generating texture name.");
 		}
 
-		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inScaled = false;	// No pre-scaling
 
-		// Read in the resource
-		final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
 
 		// Bind to the texture in OpenGL
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
