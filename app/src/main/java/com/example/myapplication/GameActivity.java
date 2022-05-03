@@ -8,11 +8,13 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import com.example.myapplication.component.GravityComponent;
+import com.example.myapplication.component.JoyControllerComponent;
 import com.example.myapplication.component.SpriteAnimatorComponent;
 import com.example.myapplication.material.Material;
 import com.example.myapplication.object.Camera;
 import com.example.myapplication.object.GameObject;
 import com.example.myapplication.object.Plane;
+import com.example.myapplication.object.Tank;
 import com.example.myapplication.view.GameView;
 
 import java.io.IOException;
@@ -32,16 +34,16 @@ public class GameActivity extends AppCompatActivity {
         Scene scene = new Scene();
 
         GameObject tank1 = makeTank();
-        GameObject tank2 = makeGuy();
+        GameObject guy = makeGuy();
         GameObject background = makeBackground();
-        tank2.posY += .4;
-        tank2.posX += .2;
-        tank2.posZ -= .5;
-        ((GravityComponent) tank2.gameComponents.get(0)).xDir = .2f;
+        guy.posY += .4;
+        guy.posX += .2;
+        guy.posZ -= .5;
+
 
 
         scene.addObject(tank1);
-        scene.addObject(tank2);
+        scene.addObject(guy);
         scene.addObject(background);
 
         scene.addCamera(new Camera());
@@ -71,25 +73,23 @@ public class GameActivity extends AppCompatActivity {
 
 
         Material material = new Material(this, bitmaps);
-        GameObject tank = new Plane(material);
-        tank.posZ = -2;
-        tank.scaleX = .6f;
-        tank.scaleY = .6f;
-        tank.scaleZ = .6f;
-        tank.addComponent(new GravityComponent(0.001f,0,-1,0));
-        tank.addComponent(new SpriteAnimatorComponent(60.0f));
+        GameObject guy = new Plane(material);
+        guy.posZ = -2;
+        guy.scaleX = .6f;
+        guy.scaleY = .6f;
+        guy.scaleZ = .6f;
+        guy.addComponent(new JoyControllerComponent(findViewById(R.id.JoyView), 10.0f));
 
-        return tank;
+        guy.addComponent(new SpriteAnimatorComponent(60.0f));
+
+        return guy;
     }
 
     private GameObject makeTank(){
-        Material material = new Material(this, R.drawable.tank);
-        GameObject tank = new Plane(material);
-        tank.posZ = -2;
-        tank.scaleX = .2f;
-        tank.scaleY = .2f;
-        tank.scaleZ = .2f;
-        tank.addComponent(new GravityComponent(.5f,0,-1,0));
+        Tank tank = new Tank(this);
+//        tank.addComponent(new GravityComponent(.5f,0,-1,0));
+        tank.addComponent(new JoyControllerComponent(findViewById(R.id.JoyView), 5.0f));
+
         return tank;
     }
     private GameObject makeBackground(){

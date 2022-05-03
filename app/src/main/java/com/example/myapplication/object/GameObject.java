@@ -28,7 +28,7 @@ public class GameObject {
     public float axisX;
     public float axisY;
     public float axisZ = 1.0f;
-    public float angle;
+    public float angle; // degrees
 
     public float scaleX = 1.0f;
     public float scaleY = 1.0f;
@@ -55,7 +55,7 @@ public class GameObject {
     public GameObject(){
 
         mModelMatrix = new float[16];
-        gameComponents = new ArrayList<GameComponent>();
+        gameComponents = new ArrayList<>();
     }
 
     public void addComponent(GameComponent gameComponent){
@@ -82,5 +82,21 @@ public class GameObject {
         Matrix.translateM(mModelMatrix, 0, posX, posY, posZ);
         Matrix.rotateM(mModelMatrix, 0, angle, axisX, axisY, axisZ);
         Matrix.scaleM(mModelMatrix, 0, scaleX, scaleY,scaleZ);
+    }
+
+    public void setVelX(float velX) {
+        this.velX = velX;
+    }
+
+    public void setVelY(float velY) {
+        this.velY = velY;
+    }
+
+    public void setVelZ(float velZ) {
+        this.velZ = velZ;
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
     }
 }

@@ -14,7 +14,5 @@ public class SpriteAnimatorComponent extends GameComponent{
     public void step(GameObject gameObject, float dt) {
         time += playSpeed*dt;
         gameObject.material.animationFrame = ((int) time) % gameObject.material.bitmaps.size();
-
-
     }
 }

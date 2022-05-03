@@ -41,9 +41,10 @@ public class JoyView extends SurfaceView implements SurfaceHolder.Callback {
     Context context;
     Bitmap baseBitmap;
     Bitmap stickBitmap;
-    int posX = 0;
-    int posY = 0;
-   boolean pressed = false;
+    public int posX = 0;
+    public int posY = 0;
+    public boolean pressed = false;
+
 
     public JoyView(Context contextIn) {
         super(contextIn);
@@ -85,6 +86,16 @@ public class JoyView extends SurfaceView implements SurfaceHolder.Callback {
 //        }
 //        return true;
 //    }
+    public float getAxisX(){
+        float scale = surfaceView.getHeight();
+        float width = surfaceView.getWidth();
+        return (posX - width/2)/scale;
+    }
+    public float getAxisY(){
+        float scale = surfaceView.getHeight();
+        return (posY - scale/2)/scale;
+    }
+
 @Override
 public boolean onTouchEvent(MotionEvent e) {
     posX = (int) e.getX();
@@ -99,7 +110,7 @@ public boolean onTouchEvent(MotionEvent e) {
     posX = (int) (surfaceView.getWidth()/2 + scale*(deltaX/mag));
     posY = (int) ( surfaceView.getHeight()/2 + scale*(deltaY/mag));
 
-    drawFrame();
+//    drawFrame();
 
     if (e.getAction() == MotionEvent.ACTION_UP){
         pressed = false;
@@ -112,6 +123,10 @@ public boolean onTouchEvent(MotionEvent e) {
     public void drawFrame(){
         if (!surfaceActive){
             return;
+        }
+        if (!pressed){
+            posX = (int)(.9*posX + .1*surfaceView.getWidth()/2);
+            posY = (int)(.9*posY + .1*surfaceView.getHeight()/2);
         }
 
         Canvas canvas = surfaceHolder.lockCanvas();

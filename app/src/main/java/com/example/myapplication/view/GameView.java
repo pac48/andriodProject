@@ -149,12 +149,8 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
             drawMesh(gameObject, camera);
 
         }
-        if (!joyView.pressed){
-            joyView.posX = (int)(.9*joyView.posX + .1*joyView.surfaceView.getWidth()/2);
-            joyView.posY = (int)(.9*joyView.posY + .1*joyView.surfaceView.getHeight()/2);
-            // draw joy view last
-            joyView.drawFrame();
-        }
+
+        joyView.drawFrame();
 
     }
 

@@ -23,9 +23,9 @@ public class GravityComponent extends GameComponent{
 
     @Override
     public void step(GameObject gameObject, float dt) {
-        gameObject.velX += xDir*gravity*dt;
-        gameObject.velY += yDir*gravity*dt;
-        gameObject.velZ += zDir*gravity*dt;
+        gameObject.setVelX(gameObject.velX + xDir*gravity*dt);
+        gameObject.setVelY(gameObject.velY + yDir*gravity*dt);
+        gameObject.setVelZ(gameObject.velZ + zDir*gravity*dt);
 
     }
 }
