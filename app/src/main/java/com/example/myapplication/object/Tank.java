@@ -38,10 +38,12 @@ public class Tank extends Plane{
 
     public void setTankAngle(){
         float newAngle = (float) ((float) 180*Math.atan2(velY, velX)/Math.PI) + 90;
+        newAngle += 180;
         float offset;
-        if (newAngle - angle > 180){ // the negative direction is shorter
+        if (newAngle - angle > 360){ // the negative direction is shorter
             newAngle -= 360;
             offset = Math.signum(newAngle-angle)*Math.min(Math.abs(newAngle-angle), 10);
+            Log.d("d", "offset " + offset);
         } else{
             offset = Math.signum(newAngle - angle)*Math.min(Math.abs(newAngle-angle), 10);
         }

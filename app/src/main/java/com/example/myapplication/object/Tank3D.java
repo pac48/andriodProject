@@ -54,7 +54,7 @@ public class Tank3D extends GameObject{
         float newAngle = (float) ((float) 180*Math.atan2(velY, velX)/Math.PI) + 90;
         float offset;
         if (newAngle - angle > 180){ // the negative direction is shorter
-            newAngle += 360;
+            newAngle -= 360;
             offset = newAngle-angle;//Math.signum(newAngle-angle)*Math.min(Math.abs(newAngle-angle), 10);
         } else{
             offset = newAngle-angle;//Math.signum(newAngle - angle)*Math.min(Math.abs(newAngle-angle), 10);
