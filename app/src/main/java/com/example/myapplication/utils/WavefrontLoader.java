@@ -27,7 +27,7 @@
  - drawToList() sets and uses flipTexCoords
  */
 
-package com.example.myapplication.object;
+package com.example.myapplication.utils;
 
 import android.opengl.GLES20;
 //import android.support.annotation.Nullable;
@@ -74,7 +74,7 @@ public class WavefrontLoader {
 	int numVerts = 0;
 	int numTextures = 0;
 	int numNormals = 0;
-	int numFaces = 0;
+	public int numFaces = 0;
 	int numPolygon = 0;
 	int numTriangles = 0;
 	int numVertsReferences = 0;
@@ -110,6 +110,7 @@ public class WavefrontLoader {
 	public ArrayList<Tuple3> getTexCoords() {
 		return texCoords;
 	}
+
 
 	public Faces getFaces() {
 		return faces;

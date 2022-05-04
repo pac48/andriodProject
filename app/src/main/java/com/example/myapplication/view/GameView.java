@@ -56,33 +56,12 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
         GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 //        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         // Use culling to remove back faces.
-        GLES20.glDisable(GLES20.GL_CULL_FACE);
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
         // Enable depth testing
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 
-        GLES20.glEnable(GLES20.GL_BLEND);
+//        GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-
-        // Position the eye in front of the origin.
-        final float eyeX = 0.0f;
-        final float eyeY = 0.0f;
-        final float eyeZ = 1.0f;
-
-        // We are looking toward the distance
-        final float lookX = 0.0f;
-        final float lookY = 0.0f;
-        final float lookZ = -1.0f;
-
-        // Set our up vector. This is where our head would be pointing were we holding the camera.
-        final float upX = 0.0f;
-        final float upY = 1.0f;
-        final float upZ = 0.0f;
-
-        Camera camera = scene.camera;
-        // Set the view matrix. This matrix can be said to represent the camera position.
-        // NOTE: In OpenGL 1, a ModelView matrix is used, which is a combination of a model and
-        // view matrix. In OpenGL 2, we can keep track of these matrices separately if we choose.
-        Matrix.setLookAtM(camera.mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
 
         for (GameObject gameObject : scene.objects){
@@ -101,16 +80,20 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
         // Create a new perspective projection matrix. The height will stay the same
         // while the width will vary as per aspect ratio.
-        final float ratio = (float) height/width;
-        final float left = -1;
-        final float right = 1;
-        final float bottom = -ratio;
-        final float top = ratio;
-        final float near = 0.1f;
-        final float far = 1000.0f;
+//        final float ratio = (float) height/width;
+//        final float left = -1;
+//        final float right = 1;
+//        final float bottom = -ratio;
+//        final float top = ratio;
+//        final float near = 0.1f;
+//        final float far = 1000.0f;
 
         Camera camera = scene.camera;
-        Matrix.orthoM(camera.mProjectionMatrix, 0, left, right, bottom, top, near, far);
+//        Matrix.orthoM(camera.mProjectionMatrix, 0, left, right, bottom, top, near, far);
+
+        camera.aspect = ((float) getWidth())/((float) getHeight());
+        Matrix.perspectiveM(camera.mProjectionMatrix, 0, camera.fovy, camera.aspect, camera.zNear, camera.zFar);
+
     }
 
     @Override
@@ -128,7 +111,8 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         for (GameObject gameObject : scene.objects){
-
+            gameObject.step(dt);
+            if (gameObject.material == null) continue;;
 
             GLES20.glUseProgram(gameObject.material.programHandle);
 
@@ -144,7 +128,7 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
             Matrix.multiplyMV(gameObject.material.light.mLightPosInWorldSpace, 0, gameObject.material.light.mLightModelMatrix, 0, gameObject.material.light.mLightPosInModelSpace, 0);
             Matrix.multiplyMV(gameObject.material.light.mLightPosInEyeSpace, 0, camera.mViewMatrix, 0, gameObject.material.light.mLightPosInWorldSpace, 0);
 
-            gameObject.step(dt);
+
 
             drawMesh(gameObject, camera);
 
@@ -201,7 +185,7 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
         GLES20.glUniform3f(gameObject.material.light.mLightPosHandle, gameObject.material.light.mLightPosInEyeSpace[0], gameObject.material.light.mLightPosInEyeSpace[1], gameObject.material.light.mLightPosInEyeSpace[2]);
 
         // Draw the cube.
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, gameObject.positions.capacity()/3);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, gameObject.numVerts);
 
     }
 

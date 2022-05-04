@@ -16,6 +16,7 @@ public class GameObject {
     public FloatBuffer colors;
     public FloatBuffer normals;
     public FloatBuffer textureCoordinates;
+    public int numVerts;
 
     public float posX;
     public float posY;
@@ -29,6 +30,7 @@ public class GameObject {
     public float axisY;
     public float axisZ = 1.0f;
     public float angle; // degrees
+    float angleVel;
 
     public float scaleX = 1.0f;
     public float scaleY = 1.0f;

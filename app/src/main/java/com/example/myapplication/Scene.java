@@ -18,6 +18,7 @@ public class Scene {
     }
     public void addCamera(Camera cameraIn){
         camera = cameraIn;
+        objects.add(camera);
 
     }
 

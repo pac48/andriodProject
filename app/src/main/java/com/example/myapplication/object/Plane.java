@@ -8,9 +8,9 @@ import java.nio.FloatBuffer;
 
 public class Plane extends GameObject{
 
-
     public Plane(Material materialIn){
         super();
+        numVerts = 3*2;
 
         PlanGeometry planGeometry = new PlanGeometry();
 

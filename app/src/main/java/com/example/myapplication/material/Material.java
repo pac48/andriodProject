@@ -92,7 +92,7 @@ public class Material {
         public Light(){
             mLightPosHandle = GLES20.glGetUniformLocation(programHandle, "u_LightPos");
             mLightModelMatrix = new float[16];
-            mLightPosInModelSpace = new float[] {0.0f, 0.0f, 0.0f, 1.0f};
+            mLightPosInModelSpace = new float[] {0.0f, 10.0f, 10.0f, 1.0f};
             mLightPosInWorldSpace = new float[4];
             mLightPosInEyeSpace = new float[4];
 

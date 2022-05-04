@@ -16,24 +16,26 @@ void main()
     float distance = length(u_LightPos - v_Position);                  
 	
 	// Get a lighting direction vector from the light to the vertex.
-    vec3 lightVector = normalize(u_LightPos - v_Position);              	
+    vec3 lightVector = normalize(u_LightPos - v_Position);
+    vec3 v_NormalN = normalize(v_Normal);
 
 	// Calculate the dot product of the light vector and vertex normal. If the normal and light vector are
 	// pointing in the same direction then it will get max illumination.
-    float diffuse = max(dot(v_Normal, lightVector), 0.0);               	  		  													  
+    float diffuse = max(dot(v_NormalN, lightVector), 0.0);
 
-	// Add attenuation. 
-    diffuse = diffuse * (1.0 / (1.0 + (0.10 * distance)));
+// 	// Add attenuation.
+//     diffuse = diffuse * (1.0 / (1.0 + (0.10 * distance)));
     
     // Add ambient lighting
     diffuse = diffuse + 0.3;
 
-    diffuse = 1.0;
+
     vec4 texColor = texture2D(u_Texture, v_TexCoordinate);
-    if(texColor.a < 0.01)
+    if(texColor.a < 0.05)
         discard;
 	// Multiply the color by the diffuse illumination level and texture value to get final output color.
 //     gl_FragColor = (v_Color * diffuse * texture2D(u_Texture, v_TexCoordinate));
+//     texColor.a = 1.0;
     gl_FragColor = (diffuse * texColor);
 }                                                                     	
 

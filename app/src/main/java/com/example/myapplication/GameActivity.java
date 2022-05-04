@@ -7,14 +7,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
-import com.example.myapplication.component.GravityComponent;
 import com.example.myapplication.component.JoyControllerComponent;
 import com.example.myapplication.component.SpriteAnimatorComponent;
+import com.example.myapplication.component.CameraTrackingComponent;
 import com.example.myapplication.material.Material;
 import com.example.myapplication.object.Camera;
+import com.example.myapplication.object.Cube;
 import com.example.myapplication.object.GameObject;
+import com.example.myapplication.object.Grass;
 import com.example.myapplication.object.Plane;
+import com.example.myapplication.object.Road;
 import com.example.myapplication.object.Tank;
+import com.example.myapplication.object.Tank3D;
 import com.example.myapplication.view.GameView;
 
 import java.io.IOException;
@@ -22,7 +26,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
-    AssetManager assetManager;
+    public static AssetManager assetManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,21 +36,32 @@ public class GameActivity extends AppCompatActivity {
         assetManager = this.getAssets();
 
         Scene scene = new Scene();
+        Camera camera = new Camera();
 
         GameObject tank1 = makeTank();
         GameObject guy = makeGuy();
         GameObject background = makeBackground();
+        GameObject road = makeRoad();
+        GameObject cube = makeCube();
+        GameObject tank3D = makeTank3D();
+
+        tank3D.addComponent(new CameraTrackingComponent(camera));
+
         guy.posY += .4;
         guy.posX += .2;
         guy.posZ -= .5;
 
 
 
+        scene.addObject(tank3D);
+        scene.addObject(cube);
         scene.addObject(tank1);
-        scene.addObject(guy);
+//        scene.addObject(guy);
         scene.addObject(background);
+        scene.addObject(road);
 
-        scene.addCamera(new Camera());
+
+        scene.addCamera(camera);
 
         GameView gameView = findViewById(R.id.GameView);
         gameView.setScene(scene);
@@ -78,7 +93,6 @@ public class GameActivity extends AppCompatActivity {
         guy.scaleX = .6f;
         guy.scaleY = .6f;
         guy.scaleZ = .6f;
-        guy.addComponent(new JoyControllerComponent(findViewById(R.id.JoyView), 10.0f));
 
         guy.addComponent(new SpriteAnimatorComponent(60.0f));
 
@@ -93,12 +107,46 @@ public class GameActivity extends AppCompatActivity {
         return tank;
     }
     private GameObject makeBackground(){
-        Material material = new Material(this, R.drawable.background);
-        GameObject background = new Plane(material);
-        background.posZ = -10;
-        background.scaleX = 2f;
-        background.scaleY = 2f;
+        Material material = new Material(this, R.drawable.grass);
+        GameObject background = new Grass(material);
+        background.posZ = -1.1f;
+        background.scaleX = 80f;
+        background.scaleY = 80f;
         background.scaleZ = 1f;
         return background;
+    }
+
+    private GameObject makeRoad(){
+        Material material = new Material(this, R.drawable.rock);
+        GameObject road = new Road(material);
+        road.posZ = -1;
+        road.scaleX = .5f;
+        road.scaleY = .5f;
+        road.scaleZ = .5f;
+        return road;
+    }
+
+    private GameObject makeCube(){
+        Material material = new Material(this, R.drawable.rock);
+        GameObject cube = new Cube(material);
+        cube.posZ = -1;
+        cube.posY += 1.3f;
+        cube.scaleX = .3f;
+        cube.scaleY = .3f;
+        cube.scaleZ = .3f;
+        return cube;
+    }
+    private GameObject makeTank3D(){
+        Material material = new Material(this, R.drawable.camo);
+        GameObject tank3D = new Tank3D(material);
+        tank3D.posZ = -1;
+        tank3D.posY += .2f;
+        tank3D.posX -= .4f;
+        tank3D.scaleX = .1f;
+        tank3D.scaleY = .1f;
+        tank3D.scaleZ = .1f;
+        tank3D.addComponent(new JoyControllerComponent(findViewById(R.id.JoyView), 10.0f));
+
+        return tank3D;
     }
 }
