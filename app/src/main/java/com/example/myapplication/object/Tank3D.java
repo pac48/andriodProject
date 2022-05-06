@@ -1,5 +1,7 @@
 package com.example.myapplication.object;
 
+import android.util.Log;
+
 import com.example.myapplication.geometry.MeshGeometry;
 import com.example.myapplication.material.Material;
 
@@ -8,10 +10,13 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 public class Tank3D extends GameObject{
-
+    public float maxAngleVel = 5;
+    public float velXOld = 0;
+    public float velYOld = 0;
 
     public Tank3D(Material materialIn) {
         super();
+        angle = 90;
 
         MeshGeometry cubeGeometry = new MeshGeometry("meshes/tank.obj");
         numVerts = cubeGeometry.numVerts;
@@ -40,38 +45,49 @@ public class Tank3D extends GameObject{
 
     @Override
     public void setVelX(float vel) {
-        velX = vel;
+        velX = .9f*velXOld + .1f*vel;
+        velXOld = velX;
 //        setTankAngle();
     }
     @Override
     public void setVelY(float vel) {
-        velY = vel;
+        velY = .9f*velYOld + .1f*vel;
+        velYOld = velY;
         setTankAngle();
     }
 
 
     public void setTankAngle(){
         float newAngle = (float) ((float) 180*Math.atan2(velY, velX)/Math.PI) + 90;
-        float offset;
-        if (newAngle - angle > 180){ // the negative direction is shorter
+        float reverse = 1;
+
+        if (newAngle - angle > 180) { // the negative direction is shorter
             newAngle -= 360;
-            offset = newAngle-angle;//Math.signum(newAngle-angle)*Math.min(Math.abs(newAngle-angle), 10);
-        } else{
-            offset = newAngle-angle;//Math.signum(newAngle - angle)*Math.min(Math.abs(newAngle-angle), 10);
         }
-        if (offset > 180){
-            offset -= 360;
-        } else if(offset < -180){
-            offset += 360;
+        if (newAngle - angle < -180) { // the positive direction is shorter
+            newAngle += 360;
         }
-        offset = Math.signum(offset)*Math.min(Math.abs(offset), 10);
+
+        float offset = newAngle-angle;
+        if (Math.abs(offset) > 90 + 20){ // reverse
+            reverse = -1;
+            offset = 180 - offset;
+            if (offset > 180) { // the negative direction is shorter
+                offset -= 360;
+            }
+            if (offset< -180) { // the positive direction is shorter
+                offset += 360;
+            }
+        }
 
         angleVel = .5f*offset + .5f*angleVel;
+        angleVel = reverse*Math.signum(angleVel)*Math.min(Math.abs(angleVel), maxAngleVel);
         angle = (angle + angleVel) % 360;
 
         float mag = (float) Math.sqrt(velX*velX+velY*velY);
-        velX = (float) (mag*Math.cos(Math.PI*(angle-90)/180));
-        velY = (float) (mag*Math.sin(Math.PI*(angle-90)/180));
+        velX = (float) ((float) reverse*(mag*Math.cos(Math.PI*(angle-90)/180)));
+        velY = (float) ((float) reverse*(mag*Math.sin(Math.PI*(angle-90)/180)));
+
 
     }
 }

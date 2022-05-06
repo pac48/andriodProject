@@ -24,8 +24,8 @@ public class JoyControllerComponent extends GameComponent{
             gameObject.setVelX(joyView.getAxisX()*speed);
             gameObject.setVelY(-joyView.getAxisY()*speed);
         } else{
-            gameObject.setVelX(gameObject.velX - .1f*gameObject.velX);
-            gameObject.setVelY(gameObject.velY -.1f*gameObject.velY);
+            gameObject.setVelX(0);
+            gameObject.setVelY(0);
         }
 
 
