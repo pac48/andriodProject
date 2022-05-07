@@ -1,5 +1,5 @@
 package com.example.myapplication.object;
-import com.example.myapplication.geometry.PlanGeometry;
+import com.example.myapplication.object.geometry.PlanGeometry;
 import com.example.myapplication.material.Material;
 
 import java.nio.ByteBuffer;

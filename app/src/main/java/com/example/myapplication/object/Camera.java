@@ -44,13 +44,10 @@ public class Camera extends GameObject{
 
     }
 
-        @Override
-    public void step(float dt){
-        super.step(dt);
+    @Override
+    public void postSimPhysics(float dt){
+        super.postSimPhysics(dt);
         Matrix.setLookAtM(mViewMatrix, 0, posX, posY, posZ, lookX, lookY, lookZ, upX, upY, upZ);
-
-
     }
-
 
 }

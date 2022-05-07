@@ -19,7 +19,7 @@ public class JoyControllerComponent extends GameComponent{
     }
 
     @Override
-    public void step(GameObject gameObject, float dt) {
+    public void apply(float dt) {
         if (joyView.pressed){
             gameObject.setVelX(joyView.getAxisX()*speed);
             gameObject.setVelY(-joyView.getAxisY()*speed);

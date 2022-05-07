@@ -1,8 +1,4 @@
-package com.example.myapplication.geometry;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+package com.example.myapplication.object.geometry;
 
 public class PlanGeometry {
     public final float[] positionData;

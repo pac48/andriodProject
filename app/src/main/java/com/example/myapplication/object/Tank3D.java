@@ -1,8 +1,6 @@
 package com.example.myapplication.object;
 
-import android.util.Log;
-
-import com.example.myapplication.geometry.MeshGeometry;
+import com.example.myapplication.object.geometry.MeshGeometry;
 import com.example.myapplication.material.Material;
 
 import java.nio.ByteBuffer;

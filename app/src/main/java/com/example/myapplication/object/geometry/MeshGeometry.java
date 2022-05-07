@@ -1,4 +1,4 @@
-package com.example.myapplication.geometry;
+package com.example.myapplication.object.geometry;
 
 import com.example.myapplication.GameActivity;
 import com.example.myapplication.utils.WavefrontLoader;

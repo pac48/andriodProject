@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import com.example.myapplication.component.JoyControllerComponent;
+import com.example.myapplication.component.RigidBodyComponent;
 import com.example.myapplication.component.SpriteAnimatorComponent;
 import com.example.myapplication.component.CameraTrackingComponent;
 import com.example.myapplication.material.Material;
@@ -26,24 +27,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.physics.bullet.collision.ContactListener;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.physics.bullet.collision.btBroadphaseInterface;
-import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionWorld;
-import com.badlogic.gdx.physics.bullet.collision.btConeShape;
-import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
-import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
-import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.collision.btDispatcher;
-import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 
 
 
@@ -60,6 +43,8 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+
+
         assetManager = this.getAssets();
 
         Scene scene = new Scene();
@@ -69,23 +54,42 @@ public class GameActivity extends AppCompatActivity {
         GameObject guy = makeGuy();
         GameObject background = makeBackground();
         GameObject road = makeRoad();
-        GameObject cube = makeCube();
         GameObject tank3D = makeTank3D();
-
         tank3D.addComponent(new CameraTrackingComponent(camera));
-
-        guy.posY += .4;
-        guy.posX += .2;
-        guy.posZ -= .5;
-
 
 
         scene.addObject(tank3D);
-        scene.addObject(cube);
-        scene.addObject(tank1);
-//        scene.addObject(guy);
         scene.addObject(background);
         scene.addObject(road);
+        int size = 60;
+        Material materialCube = new Material(this, R.drawable.rock);
+
+        for (float y = 0; y < size+1; y+=size) {
+            for (float x = 0; x < size+1; x++) {
+                GameObject cube = makeCube(.6f*(x  - size/2),.6f* (y- size/2), materialCube);
+                scene.addObject(cube);
+            }
+        }
+        for (float x = 0; x < size+1; x+=size) {
+            for (float y = 0; y < size+1; y++) {
+                GameObject cube = makeCube(.6f*(x - size/2), .6f*(y- size/2), materialCube);
+                scene.addObject(cube);
+            }
+        }
+
+        double boost = 0;
+        for (float x = 0; x < size+1; x++) {
+            for (float y = 0; y < size+1; y++) {
+                if (Math.random() + boost< .99){
+                    boost = 0;
+                    continue;
+                }
+                boost = .8;
+                GameObject cube = makeCube(.6f*(x - size/2), .6f*(y- size/2), materialCube);
+                scene.addObject(cube);
+            }
+        }
+
 
 
         scene.addCamera(camera);
@@ -131,6 +135,7 @@ public class GameActivity extends AppCompatActivity {
 //        tank.addComponent(new GravityComponent(.5f,0,-1,0));
         tank.addComponent(new JoyControllerComponent(findViewById(R.id.JoyView), 5.0f));
 
+
         return tank;
     }
     private GameObject makeBackground(){
@@ -139,7 +144,9 @@ public class GameActivity extends AppCompatActivity {
         background.posZ = -1.1f;
         background.scaleX = 80f;
         background.scaleY = 80f;
-        background.scaleZ = 1f;
+        background.scaleZ = .0001f;
+        background.addComponent(new RigidBodyComponent(0, PhysicsManager.CollisionShape.BOX));
+
         return background;
     }
 
@@ -149,30 +156,35 @@ public class GameActivity extends AppCompatActivity {
         road.posZ = -1;
         road.scaleX = .5f;
         road.scaleY = .5f;
-        road.scaleZ = .5f;
+        road.scaleZ = .01f;
+//        road.addComponent(new RigidBodyComponent(0, PhysicsManager.CollisionShape.BOX));
+
         return road;
     }
 
-    private GameObject makeCube(){
-        Material material = new Material(this, R.drawable.rock);
-        GameObject cube = new Cube(material);
+    private GameObject makeCube(float x, float y, Material materialCube){
+        GameObject cube = new Cube(materialCube);
         cube.posZ = -1;
-        cube.posY += 1.3f;
+        cube.posY = y;
+        cube.posX = x;
         cube.scaleX = .3f;
         cube.scaleY = .3f;
         cube.scaleZ = .3f;
+        cube.addComponent(new RigidBodyComponent(0, PhysicsManager.CollisionShape.BOX));
+
         return cube;
     }
     private GameObject makeTank3D(){
         Material material = new Material(this, R.drawable.camo);
         GameObject tank3D = new Tank3D(material);
-        tank3D.posZ = -1;
+        tank3D.posZ = -.9f;
         tank3D.posY += .2f;
         tank3D.posX -= .4f;
         tank3D.scaleX = .1f;
         tank3D.scaleY = .1f;
         tank3D.scaleZ = .1f;
         tank3D.addComponent(new JoyControllerComponent(findViewById(R.id.JoyView), 15.0f));
+        tank3D.addComponent(new RigidBodyComponent(100, PhysicsManager.CollisionShape.BOX, .2f, .3f, .1f));
 
         return tank3D;
     }

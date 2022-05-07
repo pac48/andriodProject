@@ -3,14 +3,18 @@ package com.example.myapplication.object;
 import android.opengl.Matrix;
 
 import com.example.myapplication.component.GameComponent;
+import com.example.myapplication.component.PhysicsComponent;
+import com.example.myapplication.component.RigidBodyComponent;
 import com.example.myapplication.material.Material;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GameObject {
     public Material material;
-    public ArrayList<GameComponent> gameComponents;
+    public HashSet<GameComponent> gameComponents;
+    public PhysicsComponent physicsComponent;
     /** Store our model data in a float buffer. */
     public FloatBuffer positions;
     public FloatBuffer colors;
@@ -57,11 +61,21 @@ public class GameObject {
     public GameObject(){
 
         mModelMatrix = new float[16];
-        gameComponents = new ArrayList<>();
+        gameComponents = new HashSet<>();
+        physicsComponent = new PhysicsComponent();
+        physicsComponent.gameObject = this;
+
     }
 
     public void addComponent(GameComponent gameComponent){
+        gameComponent.gameObject = this;
         gameComponents.add(gameComponent);
+        gameComponent.postAddComponent();
+    }
+    public void addComponent(PhysicsComponent gameComponent){
+        gameComponent.gameObject = this;
+        physicsComponent = gameComponent;
+        gameComponent.postAddComponent();
     }
 
     public void setProperties(Material materialIn, FloatBuffer positionsIn, FloatBuffer normalsIn, FloatBuffer textureCoordinatesIn, FloatBuffer colorsIn){
@@ -72,18 +86,18 @@ public class GameObject {
         colors = colorsIn;
     }
 
-    public void step(float dt){
-        for(GameComponent gameComponents : gameComponents){
-            gameComponents.step(this, dt);
-        }
-        posX += velX*dt;
-        posY += velY*dt;
-        posZ += velZ*dt;
-
+    public void postSimPhysics(float dt){
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, posX, posY, posZ);
         Matrix.rotateM(mModelMatrix, 0, angle, axisX, axisY, axisZ);
         Matrix.scaleM(mModelMatrix, 0, scaleX, scaleY,scaleZ);
+    }
+
+    public void applyComponents(float dt){
+        for(GameComponent gameComponents : gameComponents){
+            gameComponents.apply(dt);
+        }
+
     }
 
     public void setVelX(float velX) {

@@ -27,10 +27,12 @@ public class Material {
     public Context context;
     public final ArrayList<Bitmap> bitmaps;
     public int animationFrame = 0;
+    public boolean compiled;
 
     public Material(Context contextIn, final int bitmapIdIn) {
         bitmapId = bitmapIdIn;
         context = contextIn;
+        compiled = false;
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;

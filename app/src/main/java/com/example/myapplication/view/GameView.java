@@ -7,7 +7,7 @@ import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 
-import com.example.myapplication.R;
+import com.example.myapplication.PhysicsManager;
 import com.example.myapplication.Scene;
 import com.example.myapplication.object.Camera;
 import com.example.myapplication.object.GameObject;
@@ -65,8 +65,9 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
 
 
         for (GameObject gameObject : scene.objects){
-            if (gameObject.material != null){
+            if (gameObject.material != null && !gameObject.material.compiled){
                 gameObject.material.compileAndLink();
+                gameObject.material.compiled = true;
             }
         }
 
@@ -100,18 +101,22 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
 
         float dt = 1.0f/60.0f;
-//        if (time > 0){ FIXME
-//            dt = (SystemClock.uptimeMillis() % 10000L)-time;
-//            dt /= 1000.0f;
-//        }
         time = SystemClock.uptimeMillis() % 10000L;
 
-
-        Camera camera = scene.camera;
-
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        // apply input from all game components
         for (GameObject gameObject : scene.objects){
-            gameObject.step(dt);
+            gameObject.applyComponents(dt);
+        }
+
+        // apply pos, vel update using physics
+        PhysicsManager.getInstance().step(dt, scene.objects);
+
+        // render objects
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        Camera camera = scene.camera;
+        for (GameObject gameObject : scene.objects){
+
+
             if (gameObject.material == null) continue;;
 
             GLES20.glUseProgram(gameObject.material.programHandle);

@@ -3,13 +3,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.myapplication.R;
-import com.example.myapplication.component.GravityComponent;
-import com.example.myapplication.geometry.PlanGeometry;
 import com.example.myapplication.material.Material;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 public class Tank extends Plane{
     float angleVel;
