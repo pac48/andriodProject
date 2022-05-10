@@ -26,6 +26,7 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
     long time;
     public Scene scene;
     JoyView joyView;
+    MiniMapView miniMapView;
 
 
 
@@ -48,6 +49,9 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
     }
     public void setControlView(JoyView joyViewIn){
         joyView = joyViewIn;
+    }
+    public void setMiniMapView(MiniMapView miniMapViewIn){
+        miniMapView = miniMapViewIn;
     }
 
     @Override
@@ -79,19 +83,7 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
         // Set the OpenGL viewport to the same size as the surface.
         GLES20.glViewport(0, 0, width, height);
 
-        // Create a new perspective projection matrix. The height will stay the same
-        // while the width will vary as per aspect ratio.
-//        final float ratio = (float) height/width;
-//        final float left = -1;
-//        final float right = 1;
-//        final float bottom = -ratio;
-//        final float top = ratio;
-//        final float near = 0.1f;
-//        final float far = 1000.0f;
-
         Camera camera = scene.camera;
-//        Matrix.orthoM(camera.mProjectionMatrix, 0, left, right, bottom, top, near, far);
-
         camera.aspect = ((float) getWidth())/((float) getHeight());
         Matrix.perspectiveM(camera.mProjectionMatrix, 0, camera.fovy, camera.aspect, camera.zNear, camera.zFar);
 
@@ -140,6 +132,7 @@ public class GameView extends GLSurfaceView implements GLSurfaceView.Renderer {
         }
 
         joyView.drawFrame();
+        miniMapView.drawFrame();
 
     }
 

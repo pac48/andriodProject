@@ -20,8 +20,10 @@ public class PhysicsManager {
 
     public PhysicsManager(){
         Bullet.init();
-        rigidBodyComponent = new ArrayList<>();
+    }
 
+    public void reset(){
+        rigidBodyComponent = new ArrayList<>();
         ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
         btDefaultCollisionConfiguration collisionConfiguration = new btDefaultCollisionConfiguration();
         ///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
@@ -33,8 +35,6 @@ public class PhysicsManager {
         dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
         dynamicsWorld.setGravity(new Vector3(0, 0, -10));
-
-
     }
 
     public static PhysicsManager getInstance(){

@@ -6,12 +6,14 @@ import com.example.myapplication.material.Material;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 public class Cube extends GameObject{
-
+    public static ArrayList<Cube> allCubes = new ArrayList<>();
 
     public Cube(Material materialIn) {
         super();
+        allCubes.add(this);
 
         MeshGeometry cubeGeometry = new MeshGeometry("meshes/cube.obj");
         numVerts = cubeGeometry.numVerts;

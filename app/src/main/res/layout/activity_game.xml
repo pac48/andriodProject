@@ -31,6 +31,22 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_width="134dp"
+        android:layout_height="131dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01999998">
+
+        <com.example.myapplication.view.MiniMapView
+            android:id="@+id/MiniMapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="108dp"
         android:layout_height="82dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,8 +58,8 @@
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
             android:scaleType="fitCenter"

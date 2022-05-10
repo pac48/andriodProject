@@ -21,16 +21,11 @@ import com.example.myapplication.object.Road;
 import com.example.myapplication.object.Tank;
 import com.example.myapplication.object.Tank3D;
 import com.example.myapplication.view.GameView;
+import com.example.myapplication.view.MiniMapView;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-
-
-
-
-
-
 
 
 
@@ -44,7 +39,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
 
-
+        PhysicsManager.getInstance().reset();
         assetManager = this.getAssets();
 
         Scene scene = new Scene();
@@ -80,7 +75,7 @@ public class GameActivity extends AppCompatActivity {
         double boost = 0;
         for (float x = 0; x < size+1; x++) {
             for (float y = 0; y < size+1; y++) {
-                if (Math.random() + boost< .99){
+                if (Math.random() + boost < .99){
                     boost = 0;
                     continue;
                 }
@@ -90,13 +85,15 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
-
-
         scene.addCamera(camera);
 
         GameView gameView = findViewById(R.id.GameView);
         gameView.setScene(scene);
         gameView.setControlView(findViewById(R.id.JoyView));
+        gameView.setMiniMapView(findViewById(R.id.MiniMapView));
+        MiniMapView miniMapView = findViewById(R.id.MiniMapView);
+        miniMapView.addPlayer(tank3D);
+
 
     }
 
@@ -157,7 +154,6 @@ public class GameActivity extends AppCompatActivity {
         road.scaleX = .5f;
         road.scaleY = .5f;
         road.scaleZ = .01f;
-//        road.addComponent(new RigidBodyComponent(0, PhysicsManager.CollisionShape.BOX));
 
         return road;
     }
@@ -174,6 +170,7 @@ public class GameActivity extends AppCompatActivity {
 
         return cube;
     }
+
     private GameObject makeTank3D(){
         Material material = new Material(this, R.drawable.camo);
         GameObject tank3D = new Tank3D(material);

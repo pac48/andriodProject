@@ -1,6 +1,5 @@
 package com.example.myapplication.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,29 +8,15 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.opengl.GLES20;
-import android.opengl.GLSurfaceView;
-import android.opengl.Matrix;
-import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.R;
-import com.example.myapplication.Scene;
-import com.example.myapplication.object.Camera;
-import com.example.myapplication.object.GameObject;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
 
 
 public class JoyView extends SurfaceView implements SurfaceHolder.Callback {
@@ -74,18 +59,6 @@ public class JoyView extends SurfaceView implements SurfaceHolder.Callback {
 
     }
 
-//    @SuppressLint("ClickableViewAccessibility")
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        // Define your OnTouchEvent actions here
-//        // Use "switch" or "if" statement on ev.getActionMasked() or ev.getAction()
-//
-//        // Dispatch event to the children
-//        for (int i = 0; i < getChildCount(); i++) {
-//            getChildAt(i).dispatchTouchEvent(event);
-//        }
-//        return true;
-//    }
     public float getAxisX(){
         float scale = surfaceView.getHeight();
         float width = surfaceView.getWidth();
