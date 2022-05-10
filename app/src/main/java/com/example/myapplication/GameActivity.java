@@ -16,6 +16,7 @@ import com.example.myapplication.object.Camera;
 import com.example.myapplication.object.Cube;
 import com.example.myapplication.object.GameObject;
 import com.example.myapplication.object.Grass;
+import com.example.myapplication.object.Light;
 import com.example.myapplication.object.Plane;
 import com.example.myapplication.object.Road;
 import com.example.myapplication.object.Tank;
@@ -44,6 +45,11 @@ public class GameActivity extends AppCompatActivity {
 
         Scene scene = new Scene();
         Camera camera = new Camera();
+        Light light = new Light();
+
+        scene.addCamera(camera);
+        scene.addLight(light);
+
 
         GameObject tank1 = makeTank();
         GameObject guy = makeGuy();
@@ -57,7 +63,7 @@ public class GameActivity extends AppCompatActivity {
         scene.addObject(background);
         scene.addObject(road);
         int size = 60;
-        Material materialCube = new Material(this, R.drawable.rock);
+        Material materialCube = Material.getInstance(this, R.drawable.rock);
 
         for (float y = 0; y < size+1; y+=size) {
             for (float x = 0; x < size+1; x++) {
@@ -85,7 +91,7 @@ public class GameActivity extends AppCompatActivity {
             }
         }
 
-        scene.addCamera(camera);
+
 
         GameView gameView = findViewById(R.id.GameView);
         gameView.setScene(scene);
@@ -115,7 +121,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
 
-        Material material = new Material(this, bitmaps);
+        Material material = Material.getInstance(this, bitmaps);
         GameObject guy = new Plane(material);
         guy.posZ = -2;
         guy.scaleX = .6f;
@@ -136,7 +142,7 @@ public class GameActivity extends AppCompatActivity {
         return tank;
     }
     private GameObject makeBackground(){
-        Material material = new Material(this, R.drawable.grass);
+        Material material = Material.getInstance(this, R.drawable.grass);
         GameObject background = new Grass(material);
         background.posZ = -1.1f;
         background.scaleX = 80f;
@@ -148,7 +154,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private GameObject makeRoad(){
-        Material material = new Material(this, R.drawable.rock);
+        Material material = Material.getInstance(this, R.drawable.rock);
         GameObject road = new Road(material);
         road.posZ = -1;
         road.scaleX = .5f;
@@ -172,7 +178,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private GameObject makeTank3D(){
-        Material material = new Material(this, R.drawable.camo);
+        Material material = Material.getInstance(this, R.drawable.camo);
         GameObject tank3D = new Tank3D(material);
         tank3D.posZ = -.9f;
         tank3D.posY += .2f;
